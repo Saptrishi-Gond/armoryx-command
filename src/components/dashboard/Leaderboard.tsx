@@ -1,0 +1,110 @@
+import { topWeapons } from "@/data/weapons";
+import { ArrowRightLeft } from "lucide-react";
+
+const rankGlow = (rank: number) => {
+  if (rank === 1) return "glow-gold border-neon-gold/30";
+  if (rank === 2) return "glow-silver border-neon-silver/30";
+  if (rank === 3) return "glow-bronze border-neon-bronze/30";
+  return "border-border/30";
+};
+
+const rankColor = (rank: number) => {
+  if (rank === 1) return "text-neon-gold";
+  if (rank === 2) return "text-neon-silver";
+  if (rank === 3) return "text-neon-bronze";
+  return "text-muted-foreground";
+};
+
+const powerBarColor = (power: number) => {
+  if (power >= 90) return "bg-neon-cyan";
+  if (power >= 80) return "bg-neon-green";
+  return "bg-muted-foreground";
+};
+
+const Leaderboard = () => (
+  <div className="glass-panel-accent flex flex-col h-full">
+    {/* Header */}
+    <div className="px-5 pt-4 pb-3 border-b border-border/30">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-bold tracking-wide text-foreground">TOP 10 WEAPONS WORLDWIDE</h2>
+          <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mt-0.5">Global Intelligence Leaderboard</p>
+        </div>
+        <div className="flex gap-1">
+          {["All", "ICBM", "HGV", "Cruise"].map((t, i) => (
+            <button
+              key={t}
+              className={`px-2.5 py-1 rounded text-[10px] font-semibold tracking-wider transition-all ${
+                i === 0 ? "bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/20" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Column headers */}
+      <div className="grid grid-cols-[40px_1fr_80px_80px_80px_60px_36px] gap-2 mt-3 text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-semibold">
+        <span>#</span>
+        <span>Weapon</span>
+        <span>Country</span>
+        <span>Range</span>
+        <span>Speed</span>
+        <span>Power</span>
+        <span></span>
+      </div>
+    </div>
+
+    {/* Rows */}
+    <div className="flex-1 overflow-y-auto scrollbar-thin px-2 py-1">
+      {topWeapons.map((w, i) => (
+        <div
+          key={w.rank}
+          className={`animate-row-in grid grid-cols-[40px_1fr_80px_80px_80px_60px_36px] gap-2 items-center px-3 py-2.5 rounded-md mb-1 border transition-all duration-200 hover:bg-muted/30 group cursor-pointer ${rankGlow(w.rank)}`}
+          style={{ animationDelay: `${i * 80}ms` }}
+        >
+          {/* Rank */}
+          <span className={`text-xl font-bold ${rankColor(w.rank)}`}>
+            {String(w.rank).padStart(2, "0")}
+          </span>
+
+          {/* Name + Category */}
+          <div>
+            <div className="text-sm font-semibold text-foreground leading-tight">{w.name}</div>
+            <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{w.category}</div>
+          </div>
+
+          {/* Country */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-base">{w.countryCode}</span>
+            <span className="text-xs text-muted-foreground">{w.country}</span>
+          </div>
+
+          {/* Range */}
+          <span className="text-xs font-mono-tech text-foreground/80">{w.range.toLocaleString()} km</span>
+
+          {/* Speed */}
+          <span className="text-xs font-mono-tech text-foreground/80">Mach {w.speed}</span>
+
+          {/* Power bar */}
+          <div className="flex items-center gap-1.5">
+            <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
+              <div
+                className={`h-full rounded-full ${powerBarColor(w.power)} transition-all duration-700`}
+                style={{ width: `${w.power}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Compare */}
+          <button className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-muted/50">
+            <ArrowRightLeft className="h-3.5 w-3.5 text-neon-cyan" />
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+export default Leaderboard;
