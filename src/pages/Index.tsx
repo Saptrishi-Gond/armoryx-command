@@ -1,16 +1,38 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Navbar from "@/components/dashboard/Navbar";
+import WorldMonitorBar from "@/components/dashboard/WorldMonitorBar";
+import Leaderboard from "@/components/dashboard/Leaderboard";
+import GlobalMonitor from "@/components/dashboard/GlobalMonitor";
+import AnalyticsPanels from "@/components/dashboard/AnalyticsPanels";
+import QuickCompare from "@/components/dashboard/QuickCompare";
+import TrendingPanel from "@/components/dashboard/TrendingPanel";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
-  return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+const Index = () => (
+  <div className="min-h-screen bg-background bg-grid-pattern">
+    <Navbar />
+    <WorldMonitorBar />
+
+    <div className="container py-4 space-y-3">
+      {/* Main dashboard grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-3" style={{ minHeight: "520px" }}>
+        <Leaderboard />
+        <GlobalMonitor />
+      </div>
+
+      {/* Analytics */}
+      <AnalyticsPanels />
+
+      {/* Quick Compare */}
+      <QuickCompare />
+
+      {/* Trending */}
+      <TrendingPanel />
+
+      {/* Footer strip */}
+      <div className="text-center py-4 text-[10px] uppercase tracking-[0.2em] text-muted-foreground border-t border-border/20">
+        ArmoryX Intelligence System · Classified · Real-Time Global Defense Monitor
+      </div>
     </div>
-  );
-};
-
-const Index = PlaceholderIndex;
+  </div>
+);
 
 export default Index;
