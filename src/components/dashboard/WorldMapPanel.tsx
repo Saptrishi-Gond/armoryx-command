@@ -1,21 +1,89 @@
 import { countryMapData } from "@/data/weapons";
 import { Globe, Crosshair } from "lucide-react";
-import { useState } from "react";
+import { useState, memo } from "react";
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  ZoomableGroup,
+  Marker,
+} from "react-simple-maps";
+
+const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+
+// Country center coordinates [lng, lat]
+const countryCoords: Record<string, [number, number]> = {
+  USA: [-95, 40],
+  Russia: [90, 60],
+  China: [105, 35],
+  India: [78, 22],
+  UK: [-2, 54],
+  France: [2, 47],
+  Israel: [35, 31],
+  Pakistan: [70, 30],
+};
+
+const MapChart = memo(({ onHover, onLeave }: {
+  onHover: (c: typeof countryMapData[0]) => void;
+  onLeave: () => void;
+}) => (
+  <ComposableMap
+    projectionConfig={{ scale: 140, center: [20, 20] }}
+    style={{ width: "100%", height: "100%" }}
+  >
+    <ZoomableGroup>
+      <Geographies geography={geoUrl}>
+        {({ geographies }) =>
+          geographies.map((geo) => (
+            <Geography
+              key={geo.rpiKey || geo.properties?.name}
+              geography={geo}
+              fill="hsl(220 25% 12%)"
+              stroke="hsl(186 100% 50% / 0.15)"
+              strokeWidth={0.4}
+              style={{
+                default: { outline: "none" },
+                hover: { fill: "hsl(186 100% 50% / 0.2)", outline: "none" },
+                pressed: { outline: "none" },
+              }}
+            />
+          ))
+        }
+      </Geographies>
+      {/* Country markers */}
+      {countryMapData.map((c) => {
+        const coords = countryCoords[c.country];
+        if (!coords) return null;
+        return (
+          <Marker
+            key={c.country}
+            coordinates={coords}
+            onMouseEnter={() => onHover(c)}
+            onMouseLeave={onLeave}
+          >
+            <circle r={4} fill="hsl(186 100% 50%)" opacity={0.9} className="cursor-pointer" />
+            <circle r={7} fill="none" stroke="hsl(186 100% 50%)" strokeWidth={0.5} opacity={0.5}>
+              <animate attributeName="r" from="4" to="12" dur="2s" repeatCount="indefinite" />
+              <animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite" />
+            </circle>
+            <text
+              textAnchor="middle"
+              y={-10}
+              style={{ fontFamily: "Share Tech Mono", fontSize: 8, fill: "hsl(190 100% 95% / 0.7)" }}
+            >
+              {c.code} {c.country}
+            </text>
+          </Marker>
+        );
+      })}
+    </ZoomableGroup>
+  </ComposableMap>
+));
+
+MapChart.displayName = "MapChart";
 
 const WorldMapPanel = () => {
   const [hoveredCountry, setHoveredCountry] = useState<typeof countryMapData[0] | null>(null);
-
-  // Approximate positions for countries on the map panel
-  const countryPositions: Record<string, { top: string; left: string }> = {
-    USA: { top: "35%", left: "20%" },
-    Russia: { top: "25%", left: "65%" },
-    China: { top: "40%", left: "72%" },
-    India: { top: "50%", left: "65%" },
-    UK: { top: "28%", left: "42%" },
-    France: { top: "33%", left: "44%" },
-    Israel: { top: "42%", left: "53%" },
-    Pakistan: { top: "45%", left: "62%" },
-  };
 
   return (
     <div className="glass-panel-accent p-4">
@@ -30,48 +98,24 @@ const WorldMapPanel = () => {
         </div>
       </div>
 
-      {/* Map area */}
-      <div className="relative w-full h-[280px] rounded-lg border border-border/30 bg-muted/10 overflow-hidden">
+      <div className="relative w-full h-[320px] rounded-lg border border-border/30 bg-muted/10 overflow-hidden">
         {/* Grid overlay */}
-        <div className="absolute inset-0 opacity-20" style={{
+        <div className="absolute inset-0 opacity-20 pointer-events-none z-10" style={{
           backgroundImage: `
-            linear-gradient(hsl(var(--neon-cyan) / 0.15) 1px, transparent 1px),
-            linear-gradient(90deg, hsl(var(--neon-cyan) / 0.15) 1px, transparent 1px)
+            linear-gradient(hsl(var(--neon-cyan) / 0.08) 1px, transparent 1px),
+            linear-gradient(90deg, hsl(var(--neon-cyan) / 0.08) 1px, transparent 1px)
           `,
-          backgroundSize: '30px 30px'
+          backgroundSize: '40px 40px'
         }} />
 
-        {/* Latitude lines */}
-        <div className="absolute top-[25%] w-full h-px bg-neon-cyan/10" />
-        <div className="absolute top-[50%] w-full h-px bg-neon-cyan/15" />
-        <div className="absolute top-[75%] w-full h-px bg-neon-cyan/10" />
-
-        {/* Country blips */}
-        {countryMapData.map((c) => {
-          const pos = countryPositions[c.country];
-          if (!pos) return null;
-          return (
-            <div
-              key={c.country}
-              className="absolute cursor-pointer group"
-              style={{ top: pos.top, left: pos.left }}
-              onMouseEnter={() => setHoveredCountry(c)}
-              onMouseLeave={() => setHoveredCountry(null)}
-            >
-              <div className="relative">
-                <div className="h-3 w-3 rounded-full bg-neon-cyan animate-ping opacity-40" />
-                <div className="absolute inset-0 h-3 w-3 rounded-full bg-neon-cyan" />
-              </div>
-              <span className="absolute -top-1 left-5 text-[10px] font-mono-tech text-foreground/70 whitespace-nowrap">
-                {c.code} {c.country}
-              </span>
-            </div>
-          );
-        })}
+        <MapChart
+          onHover={setHoveredCountry}
+          onLeave={() => setHoveredCountry(null)}
+        />
 
         {/* Hover tooltip */}
         {hoveredCountry && (
-          <div className="absolute bottom-3 right-3 glass-panel p-3 rounded-lg min-w-[180px] z-10 border border-neon-cyan/30">
+          <div className="absolute bottom-3 right-3 glass-panel p-3 rounded-lg min-w-[180px] z-20 border border-neon-cyan/30">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-lg">{hoveredCountry.code}</span>
               <span className="text-sm font-bold text-foreground">{hoveredCountry.country}</span>
@@ -90,7 +134,7 @@ const WorldMapPanel = () => {
         )}
 
         {/* Scan line */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
           <div
             className="w-full h-px bg-gradient-to-r from-transparent via-neon-cyan/40 to-transparent"
             style={{ animation: "scanline 4s linear infinite" }}
