@@ -1,19 +1,21 @@
-import { Search, Shield } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState } from "react";
+import logo from "@/assets/worldarmory-logo.png";
 
 const navItems = ["Home", "Explore", "Compare", "Rankings"];
 
 const Navbar = () => {
   const [active, setActive] = useState("Home");
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/30 bg-background/70 backdrop-blur-xl">
-      <div className="container flex h-14 items-center justify-between">
+      <div className="flex h-14 items-center justify-between px-4">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <Shield className="h-6 w-6 text-neon-cyan" />
+          <img src={logo} alt="WorldArmory" className="h-8 w-8" />
           <span className="text-xl font-bold tracking-wider text-foreground">
-            ARMORY<span className="text-neon-cyan">X</span>
+            WORLD<span className="text-neon-cyan">ARMORY</span>
           </span>
         </div>
 
@@ -35,10 +37,22 @@ const Navbar = () => {
         </div>
 
         {/* Right */}
-        <div className="flex items-center gap-4">
-          <button className="p-2 rounded-md hover:bg-muted/50 transition-colors">
-            <Search className="h-4 w-4 text-muted-foreground" />
-          </button>
+        <div className="flex items-center gap-3">
+          <div className="relative flex items-center">
+            <button
+              onClick={() => setSearchOpen(!searchOpen)}
+              className="p-2 rounded-md hover:bg-muted/50 transition-colors"
+            >
+              <Search className="h-4 w-4 text-muted-foreground" />
+            </button>
+            {searchOpen && (
+              <input
+                autoFocus
+                placeholder="Search weapons..."
+                className="absolute right-10 top-1/2 -translate-y-1/2 w-48 bg-card border border-border/50 rounded-md px-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-neon-cyan/40 transition-all"
+              />
+            )}
+          </div>
           <div className="flex items-center gap-2 text-xs font-mono-tech text-muted-foreground">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-green opacity-75"></span>
