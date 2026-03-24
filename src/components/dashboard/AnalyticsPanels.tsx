@@ -1,22 +1,24 @@
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from "recharts";
-import { topWeapons } from "@/data/weapons";
+import { allWeapons } from "@/data/weapons";
 
-const radarData = topWeapons.slice(0, 5).map((w) => ({
-  name: w.name.split(" ")[0],
-  range: Math.round((w.range / 18000) * 100),
-  speed: Math.round((w.speed / 27) * 100),
-  power: w.power,
+const top5 = [...allWeapons].sort((a, b) => b.power_level - a.power_level).slice(0, 5);
+
+const radarData = top5.map((w) => ({
+  name: w.name.length > 12 ? w.name.split(" ")[0] : w.name,
+  range: Math.round((w.range_km / 22000) * 100),
+  speed: Math.round((w.speed_mach / 27) * 100),
+  power: w.power_level * 10,
 }));
 
-const barData = topWeapons.slice(0, 6).map((w) => ({
+const top6 = [...allWeapons].sort((a, b) => b.range_km - a.range_km).slice(0, 6);
+const barData = top6.map((w) => ({
   name: w.name.length > 10 ? w.name.split(" ").slice(-1)[0] : w.name,
-  range: w.range,
-  speed: w.speed * 100,
+  range: w.range_km,
+  speed: w.speed_mach * 100,
 }));
 
 const AnalyticsPanels = () => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-    {/* Radar */}
     <div className="glass-panel-accent p-4">
       <h3 className="text-xs font-bold tracking-wide text-foreground uppercase mb-1">Performance Radar — Top 5</h3>
       <p className="text-[10px] text-muted-foreground mb-3 uppercase tracking-wider">Range · Speed · Power</p>
@@ -31,10 +33,9 @@ const AnalyticsPanels = () => (
       </ResponsiveContainer>
     </div>
 
-    {/* Bar chart */}
     <div className="glass-panel-accent p-4">
       <h3 className="text-xs font-bold tracking-wide text-foreground uppercase mb-1">Range & Speed Comparison</h3>
-      <p className="text-[10px] text-muted-foreground mb-3 uppercase tracking-wider">Top 6 weapons</p>
+      <p className="text-[10px] text-muted-foreground mb-3 uppercase tracking-wider">Top 6 by range</p>
       <ResponsiveContainer width="100%" height={220}>
         <BarChart data={barData} barGap={2}>
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(210 20% 15%)" />

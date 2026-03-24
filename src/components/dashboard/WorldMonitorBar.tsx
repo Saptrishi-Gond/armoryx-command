@@ -1,5 +1,6 @@
 import { Globe, Zap, Target, Gauge } from "lucide-react";
 import { useEffect, useState } from "react";
+import { allWeapons } from "@/data/weapons";
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -37,6 +38,10 @@ const StatCard = ({ icon, label, value, suffix }: StatCardProps) => (
   </div>
 );
 
+const countries = new Set(allWeapons.map(w => w.country)).size;
+const maxPower = Math.max(...allWeapons.map(w => w.power_level));
+const maxSpeed = Math.max(...allWeapons.map(w => w.speed_mach));
+
 const WorldMonitorBar = () => (
   <div className="w-full border-b border-border/30 bg-card/30 backdrop-blur-sm">
     <div className="container py-3 flex items-center gap-3 overflow-x-auto scrollbar-thin">
@@ -45,10 +50,10 @@ const WorldMonitorBar = () => (
         WORLD MONITOR
       </div>
       <div className="flex gap-3">
-        <StatCard icon={<Target className="h-4 w-4" />} label="Total Weapons" value={1247} suffix="+" />
-        <StatCard icon={<Globe className="h-4 w-4" />} label="Active Countries" value={54} suffix="" />
-        <StatCard icon={<Zap className="h-4 w-4" />} label="Most Powerful" value={98} suffix="/100" />
-        <StatCard icon={<Gauge className="h-4 w-4" />} label="Max Speed" value={27} suffix=" Mach" />
+        <StatCard icon={<Target className="h-4 w-4" />} label="Total Weapons" value={allWeapons.length} suffix="+" />
+        <StatCard icon={<Globe className="h-4 w-4" />} label="Active Countries" value={countries} suffix="" />
+        <StatCard icon={<Zap className="h-4 w-4" />} label="Most Powerful" value={maxPower} suffix="/10" />
+        <StatCard icon={<Gauge className="h-4 w-4" />} label="Max Speed" value={maxSpeed} suffix=" Mach" />
       </div>
     </div>
   </div>

@@ -1,18 +1,18 @@
 import Navbar from "@/components/dashboard/Navbar";
-import { topWeapons } from "@/data/weapons";
+import { allWeapons, getFlag } from "@/data/weapons";
 import { useVotes } from "@/hooks/use-votes";
-import { ChevronUp, ArrowLeft, Target, Gauge, Zap, Shield } from "lucide-react";
+import { ChevronUp, ArrowLeft, Target, Gauge, Zap, Shield, Calendar, Layers } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from "recharts";
 
-const defaultVotes = Object.fromEntries(topWeapons.map(w => [w.name, w.votes]));
+const defaultVotes = Object.fromEntries(allWeapons.map(w => [w.name, w.votes]));
 
 const WeaponDetail = () => {
   const { name } = useParams();
   const navigate = useNavigate();
   const { vote, hasVoted, getVotes } = useVotes(defaultVotes);
 
-  const weapon = topWeapons.find(w => w.name === decodeURIComponent(name || ""));
+  const weapon = allWeapons.find(w => w.name === decodeURIComponent(name || ""));
   if (!weapon) {
     return (
       <div className="min-h-screen bg-background bg-grid-pattern">
@@ -26,39 +26,41 @@ const WeaponDetail = () => {
   }
 
   const radarData = [
-    { metric: "Range", value: (weapon.range / 18000) * 100 },
-    { metric: "Speed", value: (weapon.speed / 27) * 100 },
-    { metric: "Power", value: weapon.power },
+    { metric: "Range", value: (weapon.range_km / 22000) * 100 },
+    { metric: "Speed", value: (weapon.speed_mach / 27) * 100 },
+    { metric: "Power", value: weapon.power_level * 10 },
     { metric: "Votes", value: Math.min((getVotes(weapon.name) / 15000) * 100, 100) },
   ];
 
-  const related = topWeapons.filter(w => w.name !== weapon.name && (w.category === weapon.category || w.country === weapon.country)).slice(0, 4);
+  const related = allWeapons.filter(w => w.name !== weapon.name && (w.type === weapon.type || (w.category === weapon.category && w.country === weapon.country))).slice(0, 4);
+
+  const globalRank = [...allWeapons].sort((a, b) => b.power_level - a.power_level).findIndex(w => w.id === weapon.id) + 1;
 
   const statsCards = [
-    { icon: Target, label: "Range", value: `${weapon.range.toLocaleString()} km`, color: "text-neon-cyan" },
-    { icon: Gauge, label: "Speed", value: `Mach ${weapon.speed}`, color: "text-neon-green" },
-    { icon: Zap, label: "Power", value: `${weapon.power}/100`, color: "text-neon-gold" },
-    { icon: Shield, label: "Category", value: weapon.category, color: "text-foreground" },
+    { icon: Target, label: "Range", value: `${weapon.range_km.toLocaleString()} km`, color: "text-neon-cyan" },
+    { icon: Gauge, label: "Speed", value: `Mach ${weapon.speed_mach}`, color: "text-neon-green" },
+    { icon: Zap, label: "Power", value: `${weapon.power_level}/10`, color: "text-neon-gold" },
+    { icon: Shield, label: "Type", value: weapon.type, color: "text-foreground" },
+    { icon: Calendar, label: "Year", value: String(weapon.year), color: "text-foreground" },
+    { icon: Layers, label: "Platform", value: weapon.platform.join(", "), color: "text-foreground" },
   ];
 
   return (
     <div className="min-h-screen bg-background bg-grid-pattern">
       <Navbar />
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-4">
-        {/* Back */}
         <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft className="h-4 w-4" /> Back
         </button>
 
-        {/* Header */}
         <div className="glass-panel-accent p-6">
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="text-3xl font-bold text-neon-gold">#{weapon.rank}</span>
+                <span className="text-3xl font-bold text-neon-gold">#{globalRank}</span>
                 <h1 className="text-2xl font-bold text-foreground">{weapon.name}</h1>
               </div>
-              <p className="text-sm text-muted-foreground">{weapon.countryCode} {weapon.country} · {weapon.category}</p>
+              <p className="text-sm text-muted-foreground">{getFlag(weapon.country)} {weapon.country} · {weapon.category} · {weapon.type}</p>
             </div>
             <button onClick={() => vote(weapon.name)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all ${hasVoted(weapon.name) ? "bg-neon-cyan/20 text-neon-cyan glow-cyan border border-neon-cyan/30" : "text-muted-foreground hover:text-neon-cyan hover:bg-neon-cyan/10 border border-border/30"}`}>
@@ -68,18 +70,16 @@ const WeaponDetail = () => {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {statsCards.map((s) => (
             <div key={s.label} className="glass-panel p-4 text-center">
               <s.icon className={`h-5 w-5 mx-auto mb-2 ${s.color}`} />
               <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">{s.label}</div>
-              <div className="text-lg font-bold font-mono-tech text-foreground">{s.value}</div>
+              <div className="text-sm font-bold font-mono-tech text-foreground">{s.value}</div>
             </div>
           ))}
         </div>
 
-        {/* Charts */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="glass-panel-accent p-5">
             <h3 className="text-xs font-bold tracking-wide text-foreground uppercase mb-3">Performance Profile</h3>
@@ -108,30 +108,28 @@ const WeaponDetail = () => {
           </div>
         </div>
 
-        {/* Description */}
         <div className="glass-panel p-5">
           <h3 className="text-xs font-bold tracking-wide text-foreground uppercase mb-2">Intelligence Brief</h3>
           <p className="text-sm text-foreground/80 leading-relaxed">
-            The {weapon.name} is a {weapon.category.toLowerCase()}-class weapon system operated by {weapon.country}.
-            With a maximum range of {weapon.range.toLocaleString()} km and a top speed of Mach {weapon.speed},
-            it ranks #{weapon.rank} in the global weapons power index with a power rating of {weapon.power}/100.
-            This system represents one of the most significant military assets in the {weapon.country} defense arsenal.
+            The {weapon.name} is a {weapon.type.toLowerCase()} {weapon.category.toLowerCase()} system operated by {weapon.country}, first deployed in {weapon.year}.
+            With a maximum range of {weapon.range_km.toLocaleString()} km and a top speed of Mach {weapon.speed_mach},
+            it ranks #{globalRank} globally with a power rating of {weapon.power_level}/10.
+            This system operates on {weapon.platform.join(" and ").toLowerCase()} platforms and represents one of the most significant military assets in the {weapon.country} defense arsenal.
           </p>
         </div>
 
-        {/* Related */}
         {related.length > 0 && (
           <div>
             <h3 className="text-sm font-bold tracking-wide text-foreground uppercase mb-3">Related Weapons</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {related.map(w => (
-                <div key={w.name} onClick={() => navigate(`/weapon/${encodeURIComponent(w.name)}`)}
+                <div key={w.id} onClick={() => navigate(`/weapon/${encodeURIComponent(w.name)}`)}
                   className="glass-panel p-3 rounded-lg cursor-pointer hover:bg-muted/30 transition-all border hover:border-neon-cyan/30">
                   <div className="text-sm font-bold text-foreground">{w.name}</div>
-                  <div className="text-[10px] text-muted-foreground">{w.countryCode} {w.country}</div>
+                  <div className="text-[10px] text-muted-foreground">{getFlag(w.country)} {w.country}</div>
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-[10px] font-mono-tech text-neon-cyan">{w.category}</span>
-                    <span className="text-[10px] font-mono-tech text-muted-foreground">{w.power}/100</span>
+                    <span className="text-[10px] font-mono-tech text-neon-cyan">{w.type}</span>
+                    <span className="text-[10px] font-mono-tech text-muted-foreground">{w.power_level}/10</span>
                   </div>
                 </div>
               ))}
