@@ -1,4 +1,4 @@
-import { categories } from "@/data/weapons";
+import { categories, allWeapons } from "@/data/weapons";
 import { useState } from "react";
 
 const CategorySidebar = () => {
@@ -29,11 +29,14 @@ const CategorySidebar = () => {
         </button>
       ))}
       
-      {/* Mini stats */}
       <div className="mt-4 pt-3 border-t border-border/30 space-y-3 px-2">
         <div>
           <div className="text-[9px] uppercase tracking-widest text-muted-foreground">Total Tracked</div>
-          <div className="text-lg font-bold font-mono-tech text-foreground">1,247</div>
+          <div className="text-lg font-bold font-mono-tech text-foreground">{allWeapons.length}</div>
+        </div>
+        <div>
+          <div className="text-[9px] uppercase tracking-widest text-muted-foreground">Countries</div>
+          <div className="text-lg font-bold font-mono-tech text-foreground">{new Set(allWeapons.map(w => w.country)).size}</div>
         </div>
         <div>
           <div className="text-[9px] uppercase tracking-widest text-muted-foreground">Last Update</div>
