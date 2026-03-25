@@ -1,7 +1,10 @@
 import { countryPower, newsFeed, techUpdates, activityFeed } from "@/data/weapons";
 import { TrendingUp, TrendingDown, Newspaper, Cpu, Radio } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const RightPanel = () => (
+const RightPanel = () => {
+  const navigate = useNavigate();
+  return (
   <div className="w-[320px] flex-shrink-0 hidden xl:flex flex-col gap-3 h-fit sticky top-[60px]">
     {/* Global Power Index */}
     <div className="glass-panel-accent p-4">
@@ -10,8 +13,10 @@ const RightPanel = () => (
         <h3 className="text-xs font-bold tracking-wide text-foreground uppercase">Global Power Index</h3>
       </div>
       <div className="space-y-2">
-        {countryPower.map((c, i) => (
-          <div key={c.country} className="flex items-center gap-2 py-1.5 border-b border-border/20 last:border-0 animate-row-in" style={{ animationDelay: `${i * 60}ms` }}>
+        {countryPower.slice(0, 10).map((c, i) => (
+          <div key={c.country} className="flex items-center gap-2 py-1.5 border-b border-border/20 last:border-0 animate-row-in cursor-pointer hover:bg-muted/20 rounded px-1 transition-colors"
+            style={{ animationDelay: `${i * 60}ms` }}
+            onClick={() => navigate(`/country/${encodeURIComponent(c.country)}`)}>
             <span className="text-[10px] font-mono-tech text-muted-foreground w-4">{i + 1}</span>
             <span className="text-sm">{c.code}</span>
             <span className="text-xs font-semibold text-foreground flex-1">{c.country}</span>
@@ -99,6 +104,7 @@ const RightPanel = () => (
       </div>
     </div>
   </div>
-);
+  );
+};
 
 export default RightPanel;
