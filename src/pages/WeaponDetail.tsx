@@ -55,14 +55,17 @@ const WeaponDetail = () => {
           <ArrowLeft className="h-4 w-4" /> Back
         </button>
 
-        <div className="glass-panel-accent p-6">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-panel-accent p-6">
           <div className="flex items-start justify-between flex-wrap gap-4">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-3xl font-bold text-neon-gold">#{globalRank}</span>
-                <h1 className="text-2xl font-bold text-foreground">{weapon.name}</h1>
+            <div className="flex items-start gap-4">
+              <img src={getWeaponImage(weapon.category)} alt={weapon.category} className="w-20 h-20 object-contain opacity-70" width={80} height={80} />
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-3xl font-bold text-neon-gold">#{globalRank}</span>
+                  <h1 className="text-2xl font-bold text-foreground">{weapon.name}</h1>
+                </div>
+                <p className="text-sm text-muted-foreground">{getFlag(weapon.country)} {weapon.country} · {weapon.category} · {weapon.type}</p>
               </div>
-              <p className="text-sm text-muted-foreground">{getFlag(weapon.country)} {weapon.country} · {weapon.category} · {weapon.type}</p>
             </div>
             <button onClick={() => vote(weapon.name)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all ${hasVoted(weapon.name) ? "bg-neon-cyan/20 text-neon-cyan glow-cyan border border-neon-cyan/30" : "text-muted-foreground hover:text-neon-cyan hover:bg-neon-cyan/10 border border-border/30"}`}>
@@ -70,7 +73,7 @@ const WeaponDetail = () => {
               <span className="font-mono-tech">{getVotes(weapon.name).toLocaleString()} votes</span>
             </button>
           </div>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {statsCards.map((s) => (
