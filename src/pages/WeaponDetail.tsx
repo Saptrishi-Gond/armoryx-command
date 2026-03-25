@@ -1,8 +1,10 @@
 import Navbar from "@/components/dashboard/Navbar";
 import { allWeapons, getFlag } from "@/data/weapons";
 import { useVotes } from "@/hooks/use-votes";
+import { getWeaponImage } from "@/lib/weapon-images";
 import { ChevronUp, ArrowLeft, Target, Gauge, Zap, Shield, Calendar, Layers } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from "recharts";
 
 const defaultVotes = Object.fromEntries(allWeapons.map(w => [w.name, w.votes]));

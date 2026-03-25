@@ -1,6 +1,7 @@
 import Navbar from "@/components/dashboard/Navbar";
 import { allWeapons, getFlag } from "@/data/weapons";
 import { useVotes } from "@/hooks/use-votes";
+import { getWeaponImage } from "@/lib/weapon-images";
 import { Search, ChevronUp, LayoutGrid, List, SlidersHorizontal } from "lucide-react";
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -152,8 +153,11 @@ const Explore = () => {
                   className="glass-panel p-4 rounded-lg cursor-pointer hover:bg-muted/30 transition-all duration-200 group animate-row-in border hover:border-neon-cyan/30"
                   style={{ animationDelay: `${Math.min(i, 12) * 60}ms` }}>
                   <div className="flex items-start justify-between mb-2">
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-muted/50 text-muted-foreground border border-border/30">{w.category}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20">{w.type}</span>
+                    <img src={getWeaponImage(w.category)} alt={w.category} className="w-10 h-10 object-contain opacity-50 group-hover:opacity-80 transition-opacity" loading="lazy" width={40} height={40} />
+                    <div className="flex gap-1">
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-muted/50 text-muted-foreground border border-border/30">{w.category}</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20">{w.type}</span>
+                    </div>
                   </div>
                   <h3 className="text-base font-bold text-foreground">{w.name}</h3>
                   <div className="flex items-center gap-1.5 mt-1 text-sm text-muted-foreground">
