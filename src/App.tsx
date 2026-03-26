@@ -9,6 +9,7 @@ import Compare from "./pages/Compare";
 import Rankings from "./pages/Rankings";
 import WeaponDetail from "./pages/WeaponDetail";
 import CountryDetail from "./pages/CountryDetail";
+import Countries from "./pages/Countries";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
