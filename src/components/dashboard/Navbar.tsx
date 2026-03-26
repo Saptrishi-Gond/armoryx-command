@@ -126,7 +126,7 @@ const Navbar = () => {
                         {results.weapons.map(w => (
                           <button key={w.id} onClick={() => goTo(`/weapon/${encodeURIComponent(w.name)}`)}
                             className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-muted/30 transition-colors text-left">
-                            <img src={getWeaponImage(w.category)} alt={w.category} className="w-8 h-8 object-contain opacity-60" />
+                            <img src={getWeaponImage(w.category, w.type)} alt={w.type} className="w-8 h-8 object-contain opacity-60" />
                             <div className="flex-1 min-w-0">
                               <div className="text-sm font-semibold text-foreground truncate">{w.name}</div>
                               <div className="text-[10px] text-muted-foreground">{getFlag(w.country)} {w.country} · {w.type}</div>

@@ -153,7 +153,7 @@ const Explore = () => {
                   className="glass-panel p-4 rounded-lg cursor-pointer hover:bg-muted/30 transition-all duration-200 group animate-row-in border hover:border-neon-cyan/30"
                   style={{ animationDelay: `${Math.min(i, 12) * 60}ms` }}>
                   <div className="flex items-start justify-between mb-2">
-                    <img src={getWeaponImage(w.category)} alt={w.category} className="w-10 h-10 object-contain opacity-50 group-hover:opacity-80 transition-opacity" loading="lazy" width={40} height={40} />
+                    <img src={getWeaponImage(w.category, w.type)} alt={w.type} className="w-10 h-10 object-contain opacity-50 group-hover:opacity-80 transition-opacity" loading="lazy" width={40} height={40} />
                     <div className="flex gap-1">
                       <span className="text-[10px] px-2 py-0.5 rounded bg-muted/50 text-muted-foreground border border-border/30">{w.category}</span>
                       <span className="text-[10px] px-2 py-0.5 rounded bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20">{w.type}</span>
