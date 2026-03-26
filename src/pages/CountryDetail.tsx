@@ -263,7 +263,7 @@ const CountryDetail = () => {
                 onClick={() => navigate(`/weapon/${encodeURIComponent(w.name)}`)}
                 className="glass-panel p-3 rounded-lg cursor-pointer hover:bg-muted/20 transition-all group border hover:border-neon-cyan/30">
                 <div className="flex items-start gap-3">
-                  <img src={getWeaponImage(w.category)} alt={w.category} className="w-12 h-12 object-contain opacity-50 group-hover:opacity-90 transition-opacity" loading="lazy" width={48} height={48} />
+                  <img src={getWeaponImage(w.category, w.type)} alt={w.type} className="w-12 h-12 object-contain opacity-50 group-hover:opacity-90 transition-opacity" loading="lazy" width={48} height={48} />
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold text-foreground truncate">{w.name}</div>
                     <div className="text-[10px] text-muted-foreground">{w.type}</div>

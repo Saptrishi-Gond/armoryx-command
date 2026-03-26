@@ -173,3 +173,58 @@
   0% { transform: translateY(-100%); }
   100% { transform: translateY(100vh); }
 }
+
+/* Advanced / Hacker Mode */
+.advanced-mode {
+  --background: 120 30% 3%;
+  --foreground: 120 100% 85%;
+  --card: 120 25% 6%;
+  --card-foreground: 120 100% 85%;
+  --popover: 120 25% 6%;
+  --popover-foreground: 120 100% 85%;
+  --primary: 120 100% 45%;
+  --primary-foreground: 120 30% 3%;
+  --secondary: 120 80% 35%;
+  --secondary-foreground: 120 30% 3%;
+  --muted: 120 15% 12%;
+  --muted-foreground: 120 20% 50%;
+  --accent: 120 100% 45%;
+  --accent-foreground: 120 30% 3%;
+  --border: 120 15% 15%;
+  --input: 120 15% 15%;
+  --ring: 120 100% 45%;
+  --neon-cyan: 120 100% 45%;
+  --neon-green: 120 100% 50%;
+  --neon-gold: 60 100% 45%;
+  --panel-bg: 120 20% 5%;
+  --panel-border: 120 15% 12%;
+}
+
+.advanced-mode .bg-grid-pattern {
+  background-image:
+    linear-gradient(hsl(120 100% 45% / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(120 100% 45% / 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.advanced-mode::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    hsl(120 100% 45% / 0.015) 2px,
+    hsl(120 100% 45% / 0.015) 4px
+  );
+}
+
+.advanced-mode * {
+  font-family: 'Share Tech Mono', monospace !important;
+}
