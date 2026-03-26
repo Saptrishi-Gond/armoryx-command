@@ -9,6 +9,7 @@ import Compare from "./pages/Compare";
 import Rankings from "./pages/Rankings";
 import WeaponDetail from "./pages/WeaponDetail";
 import CountryDetail from "./pages/CountryDetail";
+import Countries from "./pages/Countries";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/rankings" element={<Rankings />} />
           <Route path="/weapon/:name" element={<WeaponDetail />} />
           <Route path="/country/:name" element={<CountryDetail />} />
+          <Route path="/countries" element={<Countries />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
