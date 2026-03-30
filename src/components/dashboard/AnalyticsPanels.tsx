@@ -1,6 +1,5 @@
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell, LineChart, Line, Legend } from "recharts";
 import { allWeapons } from "@/data/weapons";
-import { useMemo } from "react";
 
 const top5 = [...allWeapons].sort((a, b) => b.power_level - a.power_level).slice(0, 5);
 
@@ -18,19 +17,14 @@ const barData = top6.map((w) => ({
   speed: w.speed_mach * 100,
 }));
 
-// Vote growth simulation data
-const voteGrowthData = useMemo(() => {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  return months.map((m, i) => ({
-    month: m,
-    missiles: Math.round(15000 + i * 2200 + Math.random() * 3000),
-    aircraft: Math.round(12000 + i * 1800 + Math.random() * 2500),
-    drones: Math.round(8000 + i * 3000 + Math.random() * 4000),
-    naval: Math.round(10000 + i * 1500 + Math.random() * 2000),
-  }));
-}, []);
-
-function useMemo(fn: () => any, deps: any[]) { return fn(); }
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const voteGrowthData = months.map((m, i) => ({
+  month: m,
+  missiles: Math.round(15000 + i * 2200 + (i * 1337) % 3000),
+  aircraft: Math.round(12000 + i * 1800 + (i * 997) % 2500),
+  drones: Math.round(8000 + i * 3000 + (i * 1543) % 4000),
+  naval: Math.round(10000 + i * 1500 + (i * 1123) % 2000),
+}));
 
 const tooltipStyle = {
   background: "hsl(220 25% 10%)",
@@ -86,7 +80,7 @@ const AnalyticsPanels = () => (
         </ResponsiveContainer>
       </div>
 
-      {/* Line Chart - Vote Growth */}
+      {/* Line Chart */}
       <div className="glass-panel-accent p-4 hover-glow">
         <h3 className="text-xs font-display font-bold tracking-wide text-foreground uppercase mb-1">Vote Growth</h3>
         <p className="text-[10px] text-muted-foreground mb-3 uppercase tracking-wider">Category trends over time</p>
