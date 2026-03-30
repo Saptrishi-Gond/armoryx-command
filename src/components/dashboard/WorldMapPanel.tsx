@@ -93,7 +93,7 @@ const WorldMapPanel = () => {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Globe className="h-4 w-4 text-neon-cyan" />
-          <h3 className="text-sm font-bold tracking-wide text-foreground">GLOBAL THREAT MAP</h3>
+          <h3 className="text-sm font-display font-bold tracking-wide text-foreground">GLOBAL THREAT MAP</h3>
           <span className="text-[10px] font-mono-tech text-muted-foreground ml-2">{countryMapData.length} COUNTRIES TRACKED</span>
         </div>
         <div className="flex items-center gap-1.5 text-[10px] font-mono-tech text-neon-green">

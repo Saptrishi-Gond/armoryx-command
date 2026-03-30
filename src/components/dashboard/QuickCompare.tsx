@@ -5,7 +5,7 @@ const QuickCompare = () => (
     <div className="flex items-center justify-between flex-wrap gap-3">
       <div className="flex items-center gap-2">
         <ArrowRightLeft className="h-4 w-4 text-neon-cyan" />
-        <h3 className="text-sm font-bold tracking-wide text-foreground">QUICK COMPARE</h3>
+        <h3 className="text-sm font-display font-bold tracking-wide text-foreground">QUICK COMPARE</h3>
       </div>
 
       <div className="flex items-center gap-3 flex-wrap">
