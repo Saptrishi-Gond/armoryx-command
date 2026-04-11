@@ -12,6 +12,10 @@ import WeaponDetail from "./pages/WeaponDetail";
 import CountryDetail from "./pages/CountryDetail";
 import Countries from "./pages/Countries";
 import WarDomains from "./pages/WarDomains";
+import Simulator from "./pages/Simulator";
+import Community from "./pages/Community";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +36,10 @@ const App = () => (
             <Route path="/country/:name" element={<CountryDetail />} />
             <Route path="/countries" element={<Countries />} />
             <Route path="/war-domains" element={<WarDomains />} />
+            <Route path="/simulator" element={<Simulator />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

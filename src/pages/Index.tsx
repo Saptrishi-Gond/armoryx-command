@@ -27,7 +27,7 @@ const Index = () => (
 
         {/* Footer strip */}
         <div className="text-center py-4 text-[10px] uppercase tracking-[0.2em] text-muted-foreground border-t border-border/20 font-display">
-          WorldArmory Intelligence System · Classified · Real-Time Global Defense Monitor
+          Vanguard Intelligence OS · Classified · Real-Time Global Defense Monitor
         </div>
       </div>
 
