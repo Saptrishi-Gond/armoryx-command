@@ -37,7 +37,7 @@ const Simulator = () => {
     return list.slice(0, 50);
   }, [categoryFilter, search]);
 
-  const addToFleet = (weaponId: string) => {
+  const addToFleet = (weaponId: number) => {
     setFleet(prev => {
       const existing = prev.find(f => f.weaponId === weaponId);
       if (existing) return prev.map(f => f.weaponId === weaponId ? { ...f, quantity: f.quantity + 1 } : f);
@@ -45,7 +45,7 @@ const Simulator = () => {
     });
   };
 
-  const removeFromFleet = (weaponId: string) => {
+  const removeFromFleet = (weaponId: number) => {
     setFleet(prev => {
       const existing = prev.find(f => f.weaponId === weaponId);
       if (!existing) return prev;
