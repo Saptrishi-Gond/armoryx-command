@@ -19,7 +19,7 @@ const weaponCosts: Record<string, number> = {
 const getCost = (type: string) => weaponCosts[type] || 0.5;
 
 interface FleetItem {
-  weaponId: string;
+  weaponId: number;
   quantity: number;
 }
 
