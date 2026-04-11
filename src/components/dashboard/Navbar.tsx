@@ -12,6 +12,8 @@ const navItems = [
   { label: "Rankings", path: "/rankings" },
   { label: "Countries", path: "/countries" },
   { label: "War Domains", path: "/war-domains" },
+  { label: "Simulator", path: "/simulator" },
+  { label: "Community", path: "/community" },
 ];
 
 const Navbar = () => {
@@ -73,9 +75,9 @@ const Navbar = () => {
           </div>
           <span className="font-display text-lg font-bold tracking-wider hidden sm:block">
             {isAdvanced ? (
-              <><span className="text-primary">WORLD</span><span className="text-primary/60">ARMORY</span></>
+              <><span className="text-primary">VANGUARD</span><span className="text-primary/60">-OS</span></>
             ) : (
-              <>WORLD<span className="text-primary">ARMORY</span></>
+              <>VANGUARD<span className="text-primary">-OS</span></>
             )}
           </span>
         </div>
